@@ -94,7 +94,7 @@ namespace notRPG
 
             // Boss fight
             Boss boss = new Boss("Demon King", 200);
-            Console.WriteLine($"The final boss {boss.name} appears !");
+            Console.WriteLine($"\n\nThe final boss {boss.name} appears !");
 
             while (boss.HP > 0 && player.HP > 0)
             {
