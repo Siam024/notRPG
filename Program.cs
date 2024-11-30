@@ -1,5 +1,5 @@
-﻿using System;
-namespace MyApp
+using System;
+namespace notRPG
 {
     internal class Program
     {
@@ -98,7 +98,7 @@ namespace MyApp
 
             while (boss.HP > 0 && player.HP > 0)
             {
-            Console.WriteLine("Choose action: 1. Attack 2. Check Stats 3. Check Inventory 4. Use Item\n");
+            Console.WriteLine("Choose action: 1. Attack 2. Check Stats 3. Check Inventory 4. Use Item 5. Sell Item\n");
             choice = Convert.ToInt32(Console.ReadLine());
 
             switch (choice)
@@ -124,6 +124,12 @@ namespace MyApp
                         break;
                     case 4:
                         UseItem(player);
+                        break;
+                    case 5:
+                        player.Inventory.ShowInventory();
+                        Console.WriteLine("Enter number which you want to sell");
+                        int itemChoice = Convert.ToInt32(Console.ReadLine()) - 1;
+                        player.Inventory.RemoveItem(itemChoice);
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Try again.");
