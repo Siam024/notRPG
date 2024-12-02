@@ -1,5 +1,6 @@
 using System;
-namespace notRPG
+using System.Diagnostics;
+namespace MyApp
 {
     internal class Program
     {
@@ -69,7 +70,7 @@ namespace notRPG
             {
                 case 1:
                     Console.WriteLine("You decided to fight more minions.");
-                    Minions m2 = new Minions("Goblin", 20);
+                    Minions m2 = new Minions("Goblin", 30);
                     Console.WriteLine("Another Goblin appears!");
                     player.Attack(m2);
                     Console.WriteLine("\nOne more Orc appears!");
@@ -93,12 +94,12 @@ namespace notRPG
             }
 
             // Boss fight
-            Boss boss = new Boss("Demon King", 200);
-            Console.WriteLine($"\n\nThe final boss {boss.name} appears !");
+            Boss boss = new Boss("Demon King", 90);
+            Console.WriteLine($"The final boss {boss.name} appears !");
 
             while (boss.HP > 0 && player.HP > 0)
             {
-            Console.WriteLine("Choose action: 1. Attack 2. Check Stats 3. Check Inventory 4. Use Item 5. Sell Item\n");
+            Console.WriteLine("Choose action: 1. Attack 2. Check Stats 3. Check Inventory 4. Use Item 5. Sell Item 6. Buy Item\n");
             choice = Convert.ToInt32(Console.ReadLine());
 
             switch (choice)
@@ -131,6 +132,10 @@ namespace notRPG
                         int itemChoice = Convert.ToInt32(Console.ReadLine()) - 1;
                         player.Inventory.RemoveItem(itemChoice);
                         break;
+                    case 6:
+                    player.Inventory.BuyItem();
+                    break;
+
                     default:
                         Console.WriteLine("Invalid choice. Try again.");
                         break;
@@ -143,7 +148,7 @@ namespace notRPG
             }
             else
             {
-                Console.WriteLine("\n\nCongratulations, you defeated the Boss!And saved the world");
+                Console.WriteLine("\n\nCongratulations, you defeated the Boss! And saved the world");
             }
         }
 
@@ -413,6 +418,8 @@ namespace notRPG
         {
             public int capacity = 5;
             public Items[] items;
+
+            public static int totalItemsCount = 0;
     
             public Inventory()
             {
@@ -426,19 +433,52 @@ namespace notRPG
                     if (items[i] == null)
                     {
                         items[i] = item;
+                        totalItemsCount++;
                         Console.WriteLine($"{item.name} added to inventory.");
                         return;
                     }
                 }
                 Console.WriteLine("Inventory is full. Cannot add new item.");
             }
-    
+
+            public void BuyItem(){
+                Console.WriteLine("Available Item in store to purchase");
+                Console.WriteLine("1. Health Potion: Restores Health 50");
+                Console.WriteLine("2. Energy Potion: Restores Energy 30");
+                Console.WriteLine("3. Attack Boost: Increases Attack Power Temporarily 10");
+
+                int bitem = int.Parse(Console.ReadLine());
+
+                switch (bitem)
+            {
+                case 1:
+                    Items healthPotion = new Items("Health Potion", "Restores Health", 50);
+                    AddItem(healthPotion);
+                    break;
+                case 2:
+                    Items energyPotion = new Items("Energy Potion", "Restores Energy", 30);
+                    AddItem(energyPotion);
+                    break;
+                case 3:
+                    Items attackBoost = new Items("Attack Boost", "Increases Attack Power Temporarily", 10);
+                    AddItem(attackBoost);
+                    break;   
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    return;
+            }
+
+
+            }
+
             public void RemoveItem(int index)
             {
                 if (index >= 0 && index < capacity && items[index] != null)
                 {
                     Console.WriteLine($"{items[index].name} removed from inventory.");
                     items[index] = null;
+                    totalItemsCount--; // Decrement total items count
+            Console.WriteLine($"Total items: {totalItemsCount}");
                 }
                 else
                 {
@@ -448,7 +488,7 @@ namespace notRPG
     
             public void ShowInventory()
             {
-                Console.WriteLine("Inventory:");
+                Console.WriteLine($"Inventory available items: {totalItemsCount}");
                 for (int i = 0; i < capacity; i++)
                 {
                     if (items[i] != null)
